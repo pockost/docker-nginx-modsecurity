@@ -1,0 +1,15 @@
+version: "2"
+
+services:
+  nginx:
+    image: pockost/nginx-modsecurity:latest
+    volumes:
+      - ./conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      - ./conf.d/modsecurity.conf:/etc/nginx/conf.d/modsecurity.conf
+      - ./conf.d/modsecurity-main.conf:/etc/modsecurity/main.conf
+      - ./owasp-modsecurity-crs/crs-setup.conf.example:/etc/modsecurity/crs-setup.conf
+      - ./owasp-modsecurity-crs/rules:/etc/modsecurity/rules
+    ports:
+      - 8080:80
+
+
