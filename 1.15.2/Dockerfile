@@ -48,3 +48,10 @@ RUN  apk add --no-cache libcurl yajl libstdc++ \
   && ln -s /usr/local/lib/libmodsecurity.so /usr/local/lib/libmodsecurity.so.3 \
   && sed -i '/events {/i \
        load_module modules/ngx_http_modsecurity_module.so;' /etc/nginx/nginx.conf
+
+COPY docker-entrypoint.sh /usr/local/bin/
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+
+CMD ["nginx", "-g", "daemon off;"]
+
