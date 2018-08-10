@@ -1,0 +1,55 @@
+Supported tags and respective Dockerfile links
+==============================================
+1.15.2, latest ([1.15.2/Dockerfile](https://github.com/pockost/docker-nginx-modsecurity/blob/master/1.15.2/Dockerfile))
+
+
+ModSecurity
+===========
+
+ModSecurity is a Web Application Firewall (WAF). There is two part :
+
+* libModSecurity is the core of the project. This one can analyse web request and apply filter based on rule set.
+* modsecurity plugins are the binding allowing webserver (Apache, Nginx, ...) to forward received request to libModSecurity.
+
+For more information you can read <https://github.com/SpiderLabs/ModSecurity/tree/v3/master>.
+
+Image building
+==============
+
+The docker image pockost/nginx-modsecurity is build to be smallest as possible. To achieve this the image is build in two stage.
+
+The first stage build all shared object library.
+The second one copy only needed library to an official alpine-linux based official nginx image.
+
+Rules and OWASP
+===============
+
+ModSecurity need a list of rules to work as expected. If you place all your rules info `/etc/modsecurity/rules` an init script will generate a `/etc/modsecurity/main.conf` file. You can use this file in your nginx configuration to enable modsecurity like that :
+
+```
+# /etc/nginx/conf.d/modsecurity.conf
+modsecurity on;
+modsecurity_rules_file /etc/modsecurity/main.conf;
+```
+
+If you don't have any rule set the OWASP provide some. The Open Web Application Security Project (OWASP) project maintain a list of ModSecurity rules. You can find rules here : https://coreruleset.org/
+
+Additionally, if you plan to use the OWASP ruleset, you have to include the crs-setup.conf in your rules folder.
+
+
+Available environment variable :
+================================
+
+* `AUTODISCOVERY_RULES` set to no to disable auto discovery of rules.
+
+
+Usage example
+=============
+`docker run --rm -it -v /path/to/rules/:/etc/modsecurity/rules/  pockost/nginx-modsecurity:latest`
+
+You can also find an example on github repositiory.
+
+Thanks
+======
+* ModSecurity : <https://modsecurity.org/>
+* OWASP : <https://www.owasp.org/>
